@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.title }}</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .gallery { display: flex; gap: 10px; margin-top: 15px; }
+        .gallery img { width: 150px; border: 1px solid #ddd; }
+        .main-img { max-width: 400px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="{% url 'store_app:product_list' %}">← Вернуться в каталог</a>
+        <h1>{{ product.brand.name }} {{ product.title }}</h1>
+        
+        {% if product.image %}
+            <img class="main-img" src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% endif %}
+
+        <h3>Характеристики:</h3>
+        <ul>
+            <li><strong>Год выпуска:</strong> {{ product.release_year }}</li>
+            <li><strong>Состояние:</strong> {{ product.get_condition_display }}</li>
+            {% if product.storage_capacity %}<li><strong>Память:</strong> {{ product.storage_capacity }}</li>{% endif %}
+            {% if product.megapixels %}<li><strong>Камера:</strong> {{ product.megapixels }} Мп</li>{% endif %}
+            {% if product.battery_life %}<li><strong>Аккумулятор:</strong> {{ product.battery_life }}</li>{% endif %}
+        </ul>
+
+        <p><strong>Комплектация:</strong> {{ product.bundle_includes }}</p>
+        <p><strong>Описание:</strong> {{ product.description }}</p>
+        
+        <h2>Цена: {{ product.price }} руб.</h2>
+        <p>Осталось на складе: {{ product.stock }} шт.</p>
+
+        {% if product.images.all %}
+            <h3>Детальные фото состояния устройства:</h3>
+            <div class="gallery">
+                {% for img in product.images.all %}
+                    <img src="{{ img.image.url }}" alt="Дополнительное фото">
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
